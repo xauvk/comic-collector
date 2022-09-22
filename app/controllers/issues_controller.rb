@@ -1,15 +1,10 @@
 class IssuesController < ApplicationController
-
-    def index
-        issues = Issue.all
-        render json: issues, status: :ok
-    end
-
+    skip_before_action :authenticate_user, only: :from_api
 
     def from_api
-        resp = RestClient.get(`http://comicvine.com/api/issues/?api_key=#{ENV['api_key']}&format=json&offset=0`)
+        resp = RestClient.get("http://comicvine.com/api/issues/?api_key=#{ENV['api_key']}&format=json&offset=0")
         
-        render json: resp.body
+        render json: resp.body, status: :ok
     end
 
 end
