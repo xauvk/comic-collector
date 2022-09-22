@@ -5,8 +5,6 @@ class CreateCollections < ActiveRecord::Migration[7.0]
       t.belongs_to :issue, null: false, foreign_key: true
       t.string :status
       t.integer :rating
-
-      t.timestamps
     end
   end
 end

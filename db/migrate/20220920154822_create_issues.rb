@@ -7,7 +7,6 @@ class CreateIssues < ActiveRecord::Migration[7.0]
       t.string :image
       t.string :issue_num
 
-      t.timestamps
     end
   end
 end
