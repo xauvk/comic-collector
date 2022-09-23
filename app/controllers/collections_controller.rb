@@ -13,7 +13,14 @@ class CollectionsController < ApplicationController
         collection.issue_id = issue.id
         collection.save
  
+        current_user.collections << collection
         render json: collection, status: :created
+    end
+
+    def update
+        collection = find_collection
+        collection.update!(collection_params)
+        render json: collection, status: :accepted
     end
 
     def destroy
@@ -29,7 +36,7 @@ class CollectionsController < ApplicationController
     end
 
     def issue_params
-        params.permit(:name, :volume, :description, :image, :issue_number)
+        params.permit(:name, :volume, :description, :image, :issue_number, :id)
     end
 
     def find_collection
