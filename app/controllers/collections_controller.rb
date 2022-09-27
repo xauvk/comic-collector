@@ -3,7 +3,7 @@ class CollectionsController < ApplicationController
         collection = find_collection
         render json: collection, status: :ok
     end
-
+    
     def create
         user = current_user
         issue = Issue.find_or_create_by(issue_params)
@@ -32,7 +32,7 @@ class CollectionsController < ApplicationController
     private
 
     def collection_params
-        params.permit(:event_id, :status )
+        params.permit(:status, :rating)
     end
 
     def issue_params

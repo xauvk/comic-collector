@@ -5,7 +5,7 @@ class CreateIssues < ActiveRecord::Migration[7.0]
       t.string :volume
       t.text :description
       t.string :image
-      t.string :issue_num
+      t.integer :issue_number
 
     end
   end

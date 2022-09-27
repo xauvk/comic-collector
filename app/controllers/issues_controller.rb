@@ -2,8 +2,12 @@ class IssuesController < ApplicationController
     skip_before_action :authenticate_user
 
     def index
-        issues = Issue.all
-        render json: issues, status: :ok
+        render json: Issue.all, status: :ok
+    end
+
+    def show
+        i = find_issue
+        render json: i, status: :ok
     end
 
     def from_api
@@ -22,6 +26,11 @@ class IssuesController < ApplicationController
 
     def search_params
         params.permit(:search)
+    end
+
+    
+    def find_issue
+        Issue.find(params[:id])
     end
 
 end

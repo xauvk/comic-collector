@@ -10,13 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_09_20_155521) do
+ActiveRecord::Schema[7.0].define(version: 2022_09_26_124740) do
   create_table "collections", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "issue_id", null: false
     t.string "status"
     t.integer "rating"
     t.index ["issue_id"], name: "index_collections_on_issue_id"
+    t.index ["user_id", "issue_id"], name: "index_collections_on_user_id_and_issue_id", unique: true
     t.index ["user_id"], name: "index_collections_on_user_id"
   end
 
@@ -25,7 +26,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_20_155521) do
     t.string "volume"
     t.text "description"
     t.string "image"
-    t.string "issue_num"
+    t.integer "issue_number"
   end
 
   create_table "users", force: :cascade do |t|
