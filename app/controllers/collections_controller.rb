@@ -1,7 +1,7 @@
 class CollectionsController < ApplicationController
     def show
         collection = find_collection
-        render json: collection, status: :ok
+        render json: collection, status: :ok, include: ['issue']
     end
     
     def create

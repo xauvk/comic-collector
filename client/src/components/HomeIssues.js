@@ -1,18 +1,18 @@
-import { NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom"
 
-export default function IssueCard({issue, user, removeCollection, setCollections, collections}) {
-
+export default function HomeIssues({issue, removeCollection, collections, setCollections, user}) {
+    
     const c = collections.find(c => c.issue_id === issue.id)
     const i = collections.findIndex( c => c.issue_id === issue.id)
+
     let status = ''
-    
     if (c !== undefined) {
         status = c.status
     }
 
     const handleChange = e => {
         if (c === undefined) {
-            const i = {status: e.target.value, name: issue.name, volume: issue.volume.name, description: issue.description, image: issue.image.medium_url, issue_number: issue.issue_number, id: issue.id}
+            const i = {status: e.target.value, name: issue.name, volume: issue.volume, description: issue.description, image: issue.image, issue_number: issue.issue_number, id: issue.id}
 
             fetch('/collections', {
                 method: 'POST',
@@ -40,23 +40,20 @@ export default function IssueCard({issue, user, removeCollection, setCollections
             } else {
                 fetch(`/collections/${c.id}`, {method: 'DELETE'})
                 .then(removeCollection(c))
+                .then(e.target.value = '')
             }
         }
     }
 
     return (
         <div className="relative block border bg-lighty border-lighty">
-            <a href={issue.site_detail_url}>
-            <img src={issue.image.medium_url} alt={issue.name} className="object-contain w-full h-56 lg:h-72"/>
-            </a>
-            <p className="inline-block text-xs font-bold text-red">
-            {issue.volume.name} #{issue.issue_number}
-            </p>
+            <img src={issue.image} alt={issue.name} className='object-contain w-full h-56 lg:h-72' />
             
+            <p className="inline-block text-xs font-bold text-red">
+            {issue.volume} #{issue.issue_number}
+            </p>
+
             <p className="text-xs text-red">{issue.name}</p>
-            <p className="text-xs text-red">{issue.cover_date}</p>
-
-
 
             { !user ?
             <NavLink className='text-s font text-red' to='/login'>Add to Collection [+]</NavLink>

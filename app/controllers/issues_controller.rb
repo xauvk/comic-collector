@@ -10,6 +10,12 @@ class IssuesController < ApplicationController
         render json: i, status: :ok
     end
 
+    def issue_details
+        resp = RestClient.get("http://comicvine.com/api/issue/#{params[:id]}/?api_key=#{ENV['api_key']}&format=json")
+        
+        render json: resp.body, status: :ok
+    end
+
     def from_api
         resp = RestClient.get("http://comicvine.com/api/issues/?api_key=#{ENV['api_key']}&format=json&offset=0")
         

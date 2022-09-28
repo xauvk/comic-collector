@@ -1,19 +1,20 @@
 import './stylesheets/App.css';
 import { Route, Routes } from 'react-router-dom';
 import { useEffect, useState } from 'react'
-import Home from './components/Home'
+import Browse from './components/Browse'
 import NavBar from './components/NavBar'
 import Login from './components/Login'
 import SignUp from './components/SignUp'
 import MyCollection from './components/MyCollection'
-// import {AuthRoute} from './tools/Hooks';
-
+import Home from './components/Home'
 
 function App() {
   const [user, setUser] = useState(null)
-  const [issues, setIssues] = useState([])
+  const [allIssues, setAllIssues] = useState([])
   const [collections, setCollections] = useState([])
   const [errors, setErrors] = useState(false)
+
+  
 
   useEffect(() => {
     fetch('/me').then((res) => {
@@ -30,29 +31,32 @@ function App() {
     fetch('/all_issues')
       .then(res => {
         if(res.ok){
-            res.json().then(r => setIssues(r.results))
+            res.json().then(r => setAllIssues(r.results))
         } else {
           res.json().then(data => setErrors(data.errors))
         }
       })
-
   }, [])
   
   const removeCollection = (c) => {
     setCollections(old => old.filter(oC => oC.id !== c.id))
   }
-  
+
+
   if(errors) return <h1>{errors}</h1>
 
   return (
     <div className='bg-lighty bg-scroll bg-contain 
     overflow-auto m-auto h-screen w-screen'>
+
       <NavBar user={user} setUser={setUser} setCollections={setCollections}/>
       
       <Routes>
       
-        <Route exact path='/'
-        element={<Home issues={issues} user={user} removeCollection={removeCollection} setCollections={setCollections} collections={collections} />} />
+        <Route exact='true' path='/' element={<Home setErrors={setErrors} removeCollection={removeCollection} setCollections={setCollections} collections={collections} user={user} />} />
+
+        <Route path='/browse'
+        element={<Browse issues={allIssues} user={user} removeCollection={removeCollection} setCollections={setCollections} collections={collections} />} />
       
         <Route path='/login'
         element={<Login setUser={setUser} setCollections={setCollections}/>} />

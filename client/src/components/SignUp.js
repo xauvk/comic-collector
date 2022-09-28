@@ -32,7 +32,7 @@ export default function SignUp({setUser}) {
                 if(res.ok){
                     res.json().then(user => {
                         setUser(user)
-                        nav(`/me`)
+                        nav(`/`)
                     })
                 } else {
                     res.json().then(json => setErrors(Object.entries(json.errors)))
