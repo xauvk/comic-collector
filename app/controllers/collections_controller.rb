@@ -14,13 +14,13 @@ class CollectionsController < ApplicationController
         collection.save
  
         current_user.collections << collection
-        render json: collection, status: :created
+        render json: collection, status: :created, include: ['issue']
     end
 
     def update
         collection = find_collection
         collection.update!(collection_params)
-        render json: collection, status: :accepted
+        render json: collection, status: :accepted, include: ['issue']
     end
 
     def destroy
