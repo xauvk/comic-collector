@@ -1,9 +1,9 @@
 import CollectionCard from "./CollectionCard"
 
-export default function MyCollection({collections, removeCollection, setCollections}) {
+export default function MyCollection({collections, updatePage}) {
 
     const collectionComponents = collections.map(c => {
-        return (<CollectionCard key={c.id} collection={c} removeCollection={removeCollection} collections={collections} setCollections={setCollections} />)
+        return (<CollectionCard key={c.id} collection={c} updatePage={updatePage} />)
     })
 
     return (

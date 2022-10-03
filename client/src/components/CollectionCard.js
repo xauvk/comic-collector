@@ -1,21 +1,14 @@
-export default function CollectionCard({collection, removeCollection, collections, setCollections}) {
-    const i = collections.findIndex( c => c.id === collection.id)
-
+export default function CollectionCard({collection, updatePage}) {
     const handleChange = e => {
         if (e.target.value !== "Remove") {
             fetch(`/collections/${collection.id}`, {
                 method: 'PATCH',
                 headers: {'Content-Type': 'application/json'},
                 body:JSON.stringify({status: e.target.value})
-            }).then(r => r.json())
-            .then(r => setCollections(old => {
-                const n = [...old]
-                n[i] = r
-                return n
-            }))
+            }).then(updatePage)
         } else {
             fetch(`/collections/${collection.id}`, {method: 'DELETE'})
-            .then(removeCollection(collection))
+            .then(updatePage)
         }
     }
 

@@ -1,20 +1,8 @@
-import { useState } from 'react'
 import HomeIssues from './HomeIssues'
 
-export default function Home({setErrors, removeCollection, setCollections, collections, user}) {
-    const [issues, setIssues] = useState([])
-
-    fetch(`/issues`)
-      .then(res => {
-      if(res.ok){
-          res.json().then(r => setIssues(r))
-      } else {
-        res.json().then(data => setErrors(data.errors))
-      }
-    })
-
-    const issueComponents = issues.map(i => {
-        return (<HomeIssues key={i.id} issue={i} removeCollection={removeCollection} collections={collections} setCollections={setCollections} user={user}/>)
+export default function Home({allCollections}) {
+    const issueComponents = allCollections.map(c => {
+        return (<HomeIssues key={c.id} collection={c} />)
     })
 
     return (

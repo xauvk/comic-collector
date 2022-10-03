@@ -11,23 +11,12 @@ import Home from './components/Home'
 function App() {
   const [user, setUser] = useState(null)
   const [allIssues, setAllIssues] = useState([])
-  const [collections, setCollections] = useState([])
+  const [myCollections, setMyCollections] = useState([])
+  const [allCollections, setAllCollections] = useState([])
   const [errors, setErrors] = useState(false)
 
-  
-
   useEffect(() => {
-    fetch('/me').then((res) => {
-      if (res.ok) {
-        res.json().then((u) => {
-          setUser(u)
-          setCollections(u.collections)
-        })
-      } else {
-        res.json().then(json => setErrors(json.error))
-      }
-    })
-    
+    updatePage()
     fetch('/all_issues')
       .then(res => {
         if(res.ok){
@@ -38,8 +27,29 @@ function App() {
       })
   }, [])
   
+  const updatePage = () => {
+    fetch('/me').then((res) => {
+      if (res.ok) {
+        res.json().then((u) => {
+          setUser(u)
+          setMyCollections(u.collections)
+        })
+      } else {
+        res.json().then(json => setErrors(json.error))
+      }
+    })
+
+    fetch('/collections').then((res) => {
+      if (res.ok) {
+        res.json().then((r) => setAllCollections(r))
+      } else {
+        res.json().then(json => setErrors(json.error))
+      }
+    })
+  }
+
   const removeCollection = (c) => {
-    setCollections(old => old.filter(oC => oC.id !== c.id))
+    setMyCollections(old => old.filter(oC => oC.id !== c.id))
   }
 
 
@@ -49,23 +59,23 @@ function App() {
     <div className='bg-lighty bg-scroll bg-contain 
     overflow-auto m-auto h-screen w-screen'>
 
-      <NavBar user={user} setUser={setUser} setCollections={setCollections}/>
+      <NavBar user={user} setUser={setUser} setCollections={setMyCollections}/>
       
       <Routes>
       
-        <Route exact='true' path='/' element={<Home setErrors={setErrors} removeCollection={removeCollection} setCollections={setCollections} collections={collections} user={user} />} />
+        <Route exact='true' path='/' element={<Home setErrors={setErrors} updatePage={updatePage} user={user} allCollections={allCollections}/>} />
 
         <Route path='/browse'
-        element={<Browse issues={allIssues} user={user} removeCollection={removeCollection} setCollections={setCollections} collections={collections} />} />
+        element={<Browse issues={allIssues} user={user} updatePage={updatePage}/>} />
       
         <Route path='/login'
-        element={<Login setUser={setUser} setCollections={setCollections}/>} />
+        element={<Login setUser={setUser} setCollections={setMyCollections}/>} />
       
         <Route path='/signup'
         element={<SignUp setUser={setUser}/>} />
       
         <Route path='/mycollection'
-        element={<MyCollection collections={collections} removeCollection={removeCollection} setCollections={setCollections} />}
+        element={<MyCollection collections={myCollections} updatePage={updatePage} />}
         />
 
       </Routes>

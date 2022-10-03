@@ -1,4 +1,10 @@
 class CollectionsController < ApplicationController
+    skip_before_action :authenticate_user, only: :index
+    
+    def index
+        render json: Collection.all, status: :ok, include: ['issue', 'user']
+    end
+
     def show
         collection = find_collection
         render json: collection, status: :ok, include: ['issue']
@@ -12,8 +18,7 @@ class CollectionsController < ApplicationController
         collection.user_id = user.id
         collection.issue_id = issue.id
         collection.save
- 
-        current_user.collections << collection
+        
         render json: collection, status: :created, include: ['issue']
     end
 
@@ -28,6 +33,12 @@ class CollectionsController < ApplicationController
         collection.destroy
         head :no_content
     end
+    
+    def current_collection
+        issue_id = Issue.find(issue_params).id
+        collection = Collection.find_by(issue_id: issue_id, user_id: current_user.id)
+        render json: collection, status: :ok, include: ['issue']
+    end
 
     private
 
@@ -36,7 +47,7 @@ class CollectionsController < ApplicationController
     end
 
     def issue_params
-        params.permit(:name, :volume, :description, :image, :issue_number, :id)
+        params.permit(:name, :volume, :description, :image, :issue_number)
     end
 
     def find_collection

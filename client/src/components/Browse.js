@@ -1,9 +1,9 @@
 import IssueCard from "./IssueCard"
 
-export default function Browse({issues, user, removeCollection, setCollections, collections}) {
+export default function Browse({issues, user, updatePage}) {
 
     const collectionComponents = issues.map(i => {
-        return (<IssueCard key={i.id} issue={i} user={user} removeCollection={removeCollection} setCollections={setCollections} collections={collections} />)
+        return (<IssueCard key={i.id} issue={i} user={user} updatePage={updatePage} />)
     })
 
     return (
